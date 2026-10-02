@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Support plan for {{ report['student_ref'] }}{% endblock %}
+{% block title %}Support plan for {{ report['student_name'] }}{% endblock %}
 {% block content %}
   <div class="page-head">
     <div>
-      <h1>Support plan for {{ report['student_ref'] }}</h1>
+      <h1>Support plan for {{ report['student_name'] }}</h1>
       <p class="muted">
         Created {{ report['created_at'][:10] }} by {{ report['author'] }}
         <span class="tag tag-{{ report['status'] }}">{{ report['status'] | capitalize }}</span>

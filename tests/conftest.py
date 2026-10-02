@@ -49,11 +49,11 @@ class Browser:
     def login(self, email, password=PASSWORD):
         return self.post("/login", {"email": email, "password": password})
 
-    def create_report(self, student_ref="JS-07"):
+    def create_report(self, student_name="Jordan Smith"):
         response = self.post(
             "/new",
             {
-                "student_ref": student_ref,
+                "student_name": student_name,
                 "needs": "Dyslexia. Works well with printed notes.",
                 "problem": "Falling behind on written coursework. Has missed two deadlines.",
             },

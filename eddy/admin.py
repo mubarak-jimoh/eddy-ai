@@ -20,7 +20,7 @@ def dashboard():
     database = get_db()
 
     query = (
-        "SELECT reports.id, student_ref, problem, status, source, reports.created_at, "
+        "SELECT reports.id, student_name, problem, status, source, reports.created_at, "
         "users.name AS author FROM reports JOIN users ON users.id = reports.user_id"
     )
     # The status comes from the URL, so it is passed as a parameter (the ?),

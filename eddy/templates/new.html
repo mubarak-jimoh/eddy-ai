@@ -13,9 +13,9 @@
   <form method="post" class="card">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <label for="student_ref">Student reference</label>
-    <p id="ref-hint" class="hint">Use initials or an ID, not the student's full name.</p>
-    <input id="student_ref" name="student_ref" type="text" maxlength="40" value="{{ form['student_ref'] }}" aria-describedby="ref-hint" required>
+    <label for="student_name">Student name</label>
+    <p id="name-hint" class="hint">Saved with the report. The name is never sent to the AI.</p>
+    <input id="student_name" name="student_name" type="text" maxlength="80" value="{{ form['student_name'] }}" aria-describedby="name-hint" required>
 
     <label for="needs">Student's needs</label>
     <p id="needs-hint" class="hint">What staff already know: learning needs, circumstances, what has helped before.</p>

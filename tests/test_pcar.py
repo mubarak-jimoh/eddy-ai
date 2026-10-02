@@ -105,19 +105,27 @@ def test_incomplete_plan_is_rejected(monkeypatch):
 def test_failed_generation_saves_nothing_and_keeps_the_form(app, sam, monkeypatch):
     fake_anthropic(monkeypatch, error="rate")
     response = sam.post(
-        "/new", {"student_ref": "JS-07", "needs": "Some needs", "problem": "A problem"}
+        "/new", {"student_name": "Jordan Smith", "needs": "Some needs", "problem": "A problem"}
     )
     page = response.get_data(as_text=True)
     assert "The AI service is busy." in page
     assert "Some needs" in page
-    assert "JS-07" not in sam.get("/").get_data(as_text=True)
+    assert "Jordan Smith" not in sam.get("/").get_data(as_text=True)
 
 
 def test_ai_report_is_saved_and_labelled_as_a_draft(app, sam, monkeypatch):
     fake_anthropic(monkeypatch, response=FakeResponse(PLAN))
     response = sam.post(
-        "/new", {"student_ref": "JS-07", "needs": "n", "problem": "p"}, follow_redirects=True
+        "/new",
+        {"student_name": "Jordan Smith", "needs": "n", "problem": "p"},
+        follow_redirects=True,
     )
     page = response.get_data(as_text=True)
     assert "Provide printed notes before each lesson." in page
     assert "drafted by AI as a starting point" in page
+
+
+def test_student_name_is_never_sent_to_the_ai(app, sam, monkeypatch):
+    calls = fake_anthropic(monkeypatch, response=FakeResponse(PLAN))
+    sam.post("/new", {"student_name": "Jordan Smith", "needs": "n", "problem": "p"})
+    assert "Jordan Smith" not in str(calls[0])

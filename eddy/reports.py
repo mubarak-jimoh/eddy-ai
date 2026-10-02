@@ -12,15 +12,15 @@ from eddy.security import login_required
 
 bp = Blueprint("reports", __name__)
 
-MAX_REF_LENGTH = 40
+MAX_NAME_LENGTH = 80
 MAX_TEXT_LENGTH = 4000
 
 
-def validate(student_ref: str, needs: str, problem: str) -> str | None:
-    if not student_ref:
-        return "Enter a reference for the student."
-    if len(student_ref) > MAX_REF_LENGTH:
-        return f"Keep the student reference under {MAX_REF_LENGTH} characters."
+def validate(student_name: str, needs: str, problem: str) -> str | None:
+    if not student_name:
+        return "Enter the student's name."
+    if len(student_name) > MAX_NAME_LENGTH:
+        return f"Keep the student's name under {MAX_NAME_LENGTH} characters."
     if not needs:
         return "Describe the student's needs."
     if not problem:
@@ -58,7 +58,7 @@ def index():
     reports = (
         get_db()
         .execute(
-            "SELECT id, student_ref, problem, status, source, created_at FROM reports "
+            "SELECT id, student_name, problem, status, source, created_at FROM reports "
             "WHERE user_id = ? ORDER BY id DESC",
             (g.user["id"],),
         )
@@ -70,7 +70,7 @@ def index():
 @bp.route("/new", methods=("GET", "POST"))
 @login_required
 def new():
-    form = {"student_ref": "", "needs": "", "problem": ""}
+    form = {"student_name": "", "needs": "", "problem": ""}
 
     if request.method == "POST":
         form = {field: request.form.get(field, "").strip() for field in form}
@@ -78,17 +78,20 @@ def new():
 
         if error is None:
             try:
+                # Only the needs and the problem go to the AI. The student's name
+                # stays in this app's database and is never sent anywhere.
                 plan, source = pcar.generate_plan(form["needs"], form["problem"])
             except pcar.PlanError as plan_error:
                 error = str(plan_error)
             else:
                 database = get_db()
                 cursor = database.execute(
-                    "INSERT INTO reports (user_id, student_ref, needs, problem, plan_json, source) "
+                    "INSERT INTO reports "
+                    "(user_id, student_name, needs, problem, plan_json, source) "
                     "VALUES (?, ?, ?, ?, ?, ?)",
                     (
                         g.user["id"],
-                        form["student_ref"],
+                        form["student_name"],
                         form["needs"],
                         form["problem"],
                         plan.model_dump_json(),

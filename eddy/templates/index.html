@@ -11,7 +11,7 @@
       {% for report in reports %}
         <li>
           <a href="{{ url_for('reports.view', report_id=report['id']) }}">
-            <span class="ref">{{ report['student_ref'] }}</span>
+            <span class="ref">{{ report['student_name'] }}</span>
             <span class="summary">{{ report['problem'] | truncate(110) }}</span>
           </a>
           <span class="meta">

@@ -20,26 +20,30 @@ def test_creating_a_report_saves_a_pcar_plan(app, sam):
 
 
 def test_report_appears_in_my_reports(sam):
-    sam.create_report("JS-07")
-    assert "JS-07" in sam.get("/").get_data(as_text=True)
+    sam.create_report("Jordan Smith")
+    assert "Jordan Smith" in sam.get("/").get_data(as_text=True)
 
 
 def test_missing_fields_are_rejected_and_keep_what_was_typed(sam):
-    response = sam.post("/new", {"student_ref": "JS-07", "needs": "Some needs", "problem": "  "})
+    response = sam.post(
+        "/new", {"student_name": "Jordan Smith", "needs": "Some needs", "problem": "  "}
+    )
     page = response.get_data(as_text=True)
     assert "Describe the problem" in page
     assert "Some needs" in page
 
 
 def test_over_long_text_is_rejected(sam):
-    response = sam.post("/new", {"student_ref": "JS-07", "needs": "x" * 4001, "problem": "p"})
+    response = sam.post(
+        "/new", {"student_name": "Jordan Smith", "needs": "x" * 4001, "problem": "p"}
+    )
     assert "under 4000 characters" in response.get_data(as_text=True)
 
 
 def test_staff_cannot_see_each_others_reports(sam, tara):
     report_id = sam.create_report()
     assert tara.get(f"/reports/{report_id}").status_code == 404
-    assert "JS-07" not in tara.get("/").get_data(as_text=True)
+    assert "Jordan Smith" not in tara.get("/").get_data(as_text=True)
 
 
 def test_staff_cannot_delete_each_others_reports(app, sam, tara):
@@ -57,7 +61,7 @@ def test_owner_can_delete_a_report(sam):
 def test_html_typed_by_staff_is_shown_as_text(sam):
     sam.post(
         "/new",
-        {"student_ref": "<script>alert(1)</script>", "needs": "<b>bold</b>", "problem": "p"},
+        {"student_name": "<script>alert(1)</script>", "needs": "<b>bold</b>", "problem": "p"},
     )
     page = sam.get("/").get_data(as_text=True)
     assert "<script>alert(1)</script>" not in page

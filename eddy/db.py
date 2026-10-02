@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS reports (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id     INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    student_ref TEXT NOT NULL,
+    student_name TEXT NOT NULL,
     needs       TEXT NOT NULL,
     problem     TEXT NOT NULL,
     plan_json   TEXT NOT NULL,

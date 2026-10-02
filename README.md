@@ -2,9 +2,11 @@
 
 [![CI](https://github.com/Mubarakjk/eddy-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/Mubarakjk/eddy-ai/actions/workflows/ci.yml)
 
-An AI-powered student support app. Staff describe a student's needs and the problem they are facing, and EddyAI drafts a personalised support plan using the PCAR framework: **Problem, Cause, Action, Result**.
+An AI-powered student support app. A teacher enters a student's name, the student's needs and the problem they are facing, and EddyAI drafts a personalised support plan using the PCAR framework: **Problem, Cause, Action, Result**.
 
-![A PCAR support plan in EddyAI](docs/report.jpg)
+| 1. The teacher fills in three fields | 2. EddyAI returns a structured plan |
+| --- | --- |
+| ![The new support plan form](docs/form.jpg) | ![A PCAR support plan in EddyAI](docs/report.jpg) |
 
 > This is a rebuild of a project I first built at Pilot Generative AI. I wrote this version from scratch as a personal project. It contains no company code or data.
 
@@ -39,7 +41,7 @@ Browser ──▶ Flask routes ──▶ pcar.py ──▶ Claude API
              SQLite      SupportPlan (validated)
 ```
 
-1. A member of staff signs in and fills in the form: a student reference, the student's needs and the problem.
+1. A teacher signs in and fills in three fields: the student's name, the student's needs and the problem.
 2. `reports.py` validates the input and passes it to `pcar.generate_plan`.
 3. `pcar.py` sends it to Claude with a system prompt that explains PCAR and sets the rules.
 4. Claude's answer comes back as a `SupportPlan` object with four fields, already checked against the schema.
@@ -94,7 +96,7 @@ Every AI plan is shown with a notice that it is a draft for staff to check.
 | Prompt injection | Staff input is wrapped in tags and sent apart from the instructions, and the AI is told to treat it as a description, not a command |
 | Guessing which emails have accounts | Login gives one message for a wrong email or a wrong password, and takes the same time for both |
 | Stale access | The user's role is read from the database on every request, so a removed account loses access straight away |
-| Student privacy | The form asks for initials or an ID, not a full name. Signed-in pages are never cached by the browser |
+| Student privacy | The student's name is saved with the report but never sent to the AI. Only the needs and the problem are. Signed-in pages are never cached by the browser |
 
 ## Run it
 
@@ -136,7 +138,7 @@ eddy/
   db.py          SQLite schema and the create-admin command
   templates/     Jinja templates
   static/        Stylesheet
-tests/           36 tests
+tests/           37 tests
 ```
 
 ## Tests

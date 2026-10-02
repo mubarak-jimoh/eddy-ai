@@ -34,7 +34,7 @@
         <tbody>
           {% for report in reports %}
             <tr>
-              <th scope="row"><a href="{{ url_for('reports.view', report_id=report['id']) }}">{{ report['student_ref'] }}</a></th>
+              <th scope="row"><a href="{{ url_for('reports.view', report_id=report['id']) }}">{{ report['student_name'] }}</a></th>
               <td>{{ report['problem'] | truncate(70) }}</td>
               <td>{{ report['author'] }}</td>
               <td>{{ report['created_at'][:10] }}</td>
@@ -45,7 +45,7 @@
                   <input type="hidden" name="status" value="{{ 'reviewed' if report['status'] == 'new' else 'new' }}">
                   <button type="submit" class="button button-quiet button-small">
                     {{ 'Mark reviewed' if report['status'] == 'new' else 'Mark new' }}
-                    <span class="visually-hidden">: {{ report['student_ref'] }}</span>
+                    <span class="visually-hidden">: {{ report['student_name'] }}</span>
                   </button>
                 </form>
               </td>
