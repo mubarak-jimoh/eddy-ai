@@ -1,6 +1,6 @@
 # EddyAI – Case Study
 
-EddyAI is an AI-powered student support app I built at Pilot Generative AI, where I worked from December to July. I was the sole developer: I built the whole app myself, from the first route to the admin dashboard.
+EddyAI is an AI-powered student support app I built at Pilot Generative AI, where I worked from December 2025 to July 2026. I was the sole developer: I built the whole app myself, from the first route to the admin dashboard.
 
 Staff enter a student's needs and the problem they are facing. EddyAI then generates a personalised support plan, structured with the PCAR framework.
 
