@@ -1,6 +1,6 @@
 # EddyAI – Case Study
 
-EddyAI is an AI-powered student support app I worked on as part of a team at Pilot Generative AI.
+EddyAI is an AI-powered student support app I built at Pilot Generative AI, where I worked from December to July. I was the sole developer: I built the whole app myself, from the first route to the admin dashboard.
 
 Staff enter a student's needs and the problem they are facing. EddyAI then generates a personalised support plan, structured with the PCAR framework.
 
@@ -16,6 +16,16 @@ Every support plan follows the same four steps, so staff get a consistent, struc
 | **Cause** | The possible causes behind it |
 | **Action** | Practical support that staff can put in place |
 | **Result** | The intended outcome of that support |
+
+## My role
+
+I designed and built every part of EddyAI on my own:
+
+- The Flask application and its routes
+- The AI integration that turns a student's needs and problem into a PCAR support plan
+- The secure login system
+- Saving reports so plans can be returned to later
+- The admin dashboard and the access rules that limit it to authorised staff
 
 ## Features
 
@@ -41,7 +51,7 @@ Every support plan follows the same four steps, so staff get a consistent, struc
 
 ## What I learned
 
-- Building a web app with Flask as part of a team
+- Building and delivering a complete Flask app on my own, from an empty project to a working product
 - Getting structured, repeatable output from an AI model instead of free-form text
 - Handling sensitive information responsibly: login, access control and limiting who can see saved reports
 - Working to a real organisation's requirements instead of my own
