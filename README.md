@@ -1,6 +1,6 @@
 # EddyAI
 
-[![CI](https://github.com/Mubarakjk/eddy-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/Mubarakjk/eddy-ai/actions/workflows/ci.yml)
+[![CI](https://github.com/mubarak-jimoh/eddy-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/mubarak-jimoh/eddy-ai/actions/workflows/ci.yml)
 
 An AI-powered student support app. A teacher enters a student's name, the student's needs and the problem they are facing, and EddyAI drafts a personalised support plan using the PCAR framework: **Problem, Cause, Action, Result**.
 
@@ -103,7 +103,7 @@ Every AI plan is shown with a notice that it is a draft for staff to check.
 You need Python 3.10 or newer.
 
 ```bash
-git clone https://github.com/Mubarakjk/eddy-ai.git
+git clone https://github.com/mubarak-jimoh/eddy-ai.git
 cd eddy-ai
 python3 -m venv .venv
 source .venv/bin/activate
