@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}My reports{% endblock %}
+{% block content %}
+  <div class="page-head">
+    <h1>My reports</h1>
+    <a class="button" href="{{ url_for('reports.new') }}">New support plan</a>
+  </div>
+
+  {% if reports %}
+    <ul class="report-list">
+      {% for report in reports %}
+        <li>
+          <a href="{{ url_for('reports.view', report_id=report['id']) }}">
+            <span class="ref">{{ report['student_ref'] }}</span>
+            <span class="summary">{{ report['problem'] | truncate(110) }}</span>
+          </a>
+          <span class="meta">
+            <span class="tag tag-{{ report['status'] }}">{{ report['status'] | capitalize }}</span>
+            {{ report['created_at'][:10] }}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <section class="card empty">
+      <h2>No reports yet</h2>
+      <p class="muted">Describe a student's needs and the problem they are facing, and EddyAI will draft a support plan.</p>
+      <a class="button" href="{{ url_for('reports.new') }}">Create your first plan</a>
+    </section>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard{% endblock %}
+{% block content %}
+  <h1>Admin dashboard</h1>
+
+  <dl class="stats">
+    <div><dt>All reports</dt><dd>{{ totals['total'] }}</dd></div>
+    <div><dt>Waiting for review</dt><dd>{{ totals['new'] }}</dd></div>
+    <div><dt>Reviewed</dt><dd>{{ totals['reviewed'] }}</dd></div>
+  </dl>
+
+  <div class="page-head">
+    <h2>Reports</h2>
+    <nav class="filters" aria-label="Filter reports">
+      <a href="{{ url_for('admin.dashboard') }}" {% if not status %}aria-current="true"{% endif %}>All</a>
+      <a href="{{ url_for('admin.dashboard', status='new') }}" {% if status == 'new' %}aria-current="true"{% endif %}>New</a>
+      <a href="{{ url_for('admin.dashboard', status='reviewed') }}" {% if status == 'reviewed' %}aria-current="true"{% endif %}>Reviewed</a>
+    </nav>
+  </div>
+
+  {% if reports %}
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Problem</th>
+            <th scope="col">Staff member</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col"><span class="visually-hidden">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for report in reports %}
+            <tr>
+              <th scope="row"><a href="{{ url_for('reports.view', report_id=report['id']) }}">{{ report['student_ref'] }}</a></th>
+              <td>{{ report['problem'] | truncate(70) }}</td>
+              <td>{{ report['author'] }}</td>
+              <td>{{ report['created_at'][:10] }}</td>
+              <td><span class="tag tag-{{ report['status'] }}">{{ report['status'] | capitalize }}</span></td>
+              <td>
+                <form method="post" action="{{ url_for('admin.set_status', report_id=report['id']) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <input type="hidden" name="status" value="{{ 'reviewed' if report['status'] == 'new' else 'new' }}">
+                  <button type="submit" class="button button-quiet button-small">
+                    {{ 'Mark reviewed' if report['status'] == 'new' else 'Mark new' }}
+                    <span class="visually-hidden">: {{ report['student_ref'] }}</span>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No reports match this filter.</p>
+  {% endif %}
+
+  <h2>Staff</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th><th scope="col">Reports</th></tr>
+      </thead>
+      <tbody>
+        {% for person in staff %}
+          <tr>
+            <th scope="row">{{ person['name'] }}</th>
+            <td>{{ person['email'] }}</td>
+            <td>{{ person['role'] | capitalize }}</td>
+            <td>{{ person['report_count'] }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

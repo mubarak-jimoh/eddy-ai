@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} – EddyAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="{{ url_for('reports.index') }}">EddyAI</a>
+        {% if g.user %}
+          <nav aria-label="Main">
+            <a href="{{ url_for('reports.index') }}">My reports</a>
+            <a href="{{ url_for('reports.new') }}">New plan</a>
+            {% if g.user['role'] == 'admin' %}
+              <a href="{{ url_for('admin.dashboard') }}">Admin</a>
+            {% endif %}
+          </nav>
+          <form class="signout" method="post" action="{{ url_for('auth.logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <span class="who">{{ g.user['name'] }}</span>
+            <button type="submit" class="button button-quiet">Sign out</button>
+          </form>
+        {% endif %}
+      </div>
+    </header>
+
+    <main id="main" class="wrap">
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="flash flash-{{ category }}" role="{{ 'alert' if category == 'error' else 'status' }}">{{ message }}</p>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}New support plan{% endblock %}
+{% block content %}
+  <h1>New support plan</h1>
+
+  {% if not ai_available %}
+    <p class="notice">
+      <strong>Demo mode.</strong> No AI key is set, so EddyAI will return an example plan
+      instead of real analysis. Set <code>ANTHROPIC_API_KEY</code> to turn the AI on.
+    </p>
+  {% endif %}
+
+  <form method="post" class="card">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label for="student_ref">Student reference</label>
+    <p id="ref-hint" class="hint">Use initials or an ID, not the student's full name.</p>
+    <input id="student_ref" name="student_ref" type="text" maxlength="40" value="{{ form['student_ref'] }}" aria-describedby="ref-hint" required>
+
+    <label for="needs">Student's needs</label>
+    <p id="needs-hint" class="hint">What staff already know: learning needs, circumstances, what has helped before.</p>
+    <textarea id="needs" name="needs" rows="5" maxlength="4000" aria-describedby="needs-hint" required>{{ form['needs'] }}</textarea>
+
+    <label for="problem">The problem they are facing</label>
+    <p id="problem-hint" class="hint">What is happening, when, and how it is affecting them.</p>
+    <textarea id="problem" name="problem" rows="5" maxlength="4000" aria-describedby="problem-hint" required>{{ form['problem'] }}</textarea>
+
+    <button type="submit" class="button">Generate support plan</button>
+  </form>
+{% endblock %}

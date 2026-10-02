@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Support plan for {{ report['student_ref'] }}{% endblock %}
+{% block content %}
+  <div class="page-head">
+    <div>
+      <h1>Support plan for {{ report['student_ref'] }}</h1>
+      <p class="muted">
+        Created {{ report['created_at'][:10] }} by {{ report['author'] }}
+        <span class="tag tag-{{ report['status'] }}">{{ report['status'] | capitalize }}</span>
+      </p>
+    </div>
+  </div>
+
+  {% if report['source'] == 'demo' %}
+    <p class="notice"><strong>Example plan.</strong> This was made in demo mode, without AI. It is not real analysis.</p>
+  {% else %}
+    <p class="notice">This plan was drafted by AI as a starting point. Staff who know the student should check it before acting on it.</p>
+  {% endif %}
+
+  <section class="card request">
+    <h2>What staff entered</h2>
+    <h3>Needs</h3>
+    <p class="pre">{{ report['needs'] }}</p>
+    <h3>Problem</h3>
+    <p class="pre">{{ report['problem'] }}</p>
+  </section>
+
+  <div class="pcar">
+    <section class="card pcar-step">
+      <h2><span class="letter" aria-hidden="true">P</span> Problem</h2>
+      <p>{{ plan['problem'] }}</p>
+    </section>
+    <section class="card pcar-step">
+      <h2><span class="letter" aria-hidden="true">C</span> Possible causes</h2>
+      <ul>{% for cause in plan['causes'] %}<li>{{ cause }}</li>{% endfor %}</ul>
+    </section>
+    <section class="card pcar-step">
+      <h2><span class="letter" aria-hidden="true">A</span> Actions</h2>
+      <ol>{% for action in plan['actions'] %}<li>{{ action }}</li>{% endfor %}</ol>
+    </section>
+    <section class="card pcar-step">
+      <h2><span class="letter" aria-hidden="true">R</span> Intended result</h2>
+      <p>{{ plan['result'] }}</p>
+    </section>
+  </div>
+
+  <div class="report-actions">
+    {% if g.user['role'] == 'admin' %}
+      <form method="post" action="{{ url_for('admin.set_status', report_id=report['id']) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="from" value="report">
+        {% if report['status'] == 'new' %}
+          <input type="hidden" name="status" value="reviewed">
+          <button type="submit" class="button">Mark as reviewed</button>
+        {% else %}
+          <input type="hidden" name="status" value="new">
+          <button type="submit" class="button button-quiet">Mark as new</button>
+        {% endif %}
+      </form>
+    {% endif %}
+    <form method="post" action="{{ url_for('reports.delete', report_id=report['id']) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="button button-danger">Delete report</button>
+    </form>
+  </div>
+{% endblock %}
